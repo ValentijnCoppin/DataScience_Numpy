@@ -148,7 +148,10 @@ def create_dict_of_colored_images(image:np.array, saturating:bool = False) -> di
     red_colored = image_change_hue(original, 'red', saturating)
     green_colored = image_change_hue(original, 'green', saturating)
     blue_colored = image_change_hue(original, 'blue', saturating)
-    return {"o": original, "r": red_colored, "g": green_colored, "b": blue_colored}
+    cyan_colored = image_change_hue(original, 'cyan', saturating)
+    yellow_colored = image_change_hue(original, 'yellow', saturating)
+    magenta_colored = image_change_hue(original, 'magenta', saturating)
+    return {"o": original, "r": red_colored, "g": green_colored, "b": blue_colored, "c": cyan_colored, "y": yellow_colored, "m": magenta_colored}
 
    
 def create_all_possible_alterations(image:np.array) -> list[dict]:
@@ -199,8 +202,6 @@ def image_matrix_with_alterations(image, *, flip_matrix=None, color_matrix=None)
 
     return np.concatenate(list_of_concatenated_images, axis=0)
 
-    print("The size of the flip matrix needs to be the same as the size of the color matrix")
-
  
 def enlarge_image(image, factor:int):
     factor = int(factor)
@@ -229,7 +230,7 @@ def create_color_matrix_from_border_list(color_list):
     return grid
 
 
-def create_colorful_big_one(image, random_center=False, *, flip_matrix=None, color_matrix=None):
+def create_colorful_big_one(image, scramble_center=False, *, flip_matrix=None, color_matrix=None):
     try:
         flip_matrix, color_matrix = create_flip_or_color_matrix(flip_matrix, color_matrix)
     except MemoryError as e:
@@ -240,7 +241,7 @@ def create_colorful_big_one(image, random_center=False, *, flip_matrix=None, col
 
     picture_grid = image_matrix_with_alterations(image, flip_matrix=flip_matrix, color_matrix=color_matrix)
     center_image = enlarge_image(image, center_size)
-    if random_center:
+    if scramble_center:
         random_list = random.sample(range(center_size**2), center_size**2)
         segmented_list = segment_image(center_image, center_size**2)
         center_image = reshape_image(segmented_list, random_list)
@@ -289,9 +290,7 @@ def segment_image(image:np.array, number_of_segments):
 def reshape_image(image_list, new_arrangment):
     image_rows = []
     number_of_segments = len(image_list)
-    print(number_of_segments)
     side_length = int(number_of_segments**0.5)
-    print(side_length)
     rearranged_list = [image_list[i] for i in new_arrangment]
     for i in range(side_length):
         image_row = rearranged_list[i * side_length : (i+1) * side_length]

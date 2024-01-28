@@ -18,3 +18,6 @@ __pycache__/
 *.sublime-project
 *.sublime-workspace
 poetry.lock
+
+# Allow Pickle_rick to roam free
+!/data/input/pickle_rick.png
