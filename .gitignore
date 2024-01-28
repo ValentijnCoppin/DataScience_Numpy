@@ -13,7 +13,6 @@ __pycache__/
 # Allow Pickle_rick to roam free though
 !/data/input/pickle_rick.png
 
-
 # Ignore IDE and editor-specific files
 .idea/
 .vscode/
