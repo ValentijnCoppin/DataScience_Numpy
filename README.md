@@ -1,3 +1,5 @@
+The git repo for this project: https://github.com/ValentijnCoppin/DataScience_Numpy
+
 # Creating the virtual environment
 ## install Poetry
 ```bash

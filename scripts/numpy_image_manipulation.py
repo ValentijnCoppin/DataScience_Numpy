@@ -2,12 +2,11 @@ import numpy as np
 from PIL import Image
 import random
 
-
 def create_error_image() -> np.array:
     """
     creates a numpy array for a black image with a red cross
     Returns:
-    - 3 dimensional NumPy array formatted to RGB.
+        np.ndarray: A 3-dimensional NumPy array formatted to RGB.
     """
     arr = np.zeros((20, 20, 3)).astype(np.uint8)
     for i in range(arr.shape[0]):
@@ -21,11 +20,12 @@ def image_read_from_file(directory:str) -> np.array:
     Returns the numpy array of an RGB formatted image
 
     Parameters:
-    - directory: The directory + name of the image file.
+        directory (str): The directory and name of the image file.
 
     Returns:
-    - Numpy array of an image.
+        np.ndarray: Numpy array representing an image.
     """
+
     image = Image.open(directory)
     # if image.mode == 'RGB':
     #     image = Image.fromarray(np.array(image), 'RGB')
@@ -37,15 +37,16 @@ def image_read_from_file(directory:str) -> np.array:
 
 def image_flip(image: np.array, axis:str) -> np.array:
     """
-    returns an image flipped over a defined axis
+    Returns an image flipped over a defined axis.
 
     Parameters:
-    - image: Numpy array of an image.
-    - axis: 'x', 'y' or 'both' define over which axis to flip the image.
+        image (np.ndarray): Numpy array representing an image.
+        axis (str): Specifies the axis to flip the image over ('x', 'y', or 'both').
 
     Returns:
-    - Numpy array of an image.
+        np.ndarray: Numpy array representing the flipped image.
     """
+
     flipped_image = image.copy()
     axis = axis.lower()
     if axis == 'y':
@@ -62,15 +63,18 @@ def image_flip(image: np.array, axis:str) -> np.array:
 
 def image_change_hue(image:np.array, color:str, saturating:bool = False) -> np.array:
     """
-    returns an image with updated hue. The hue is altered by setting RGB layers to 0
+    Returns an image with updated hue.
+
+    The hue is altered by setting RGB layers to 0.
 
     Parameters:
-    - image: Numpy array of an image.
-    - color: name of the color you want to alter.
-    - saturating: Optional: True will change hue by saturating RGB layers. False will change hue by zeroing RGB layers 
+        image (np.ndarray): Numpy array representing an image.
+        color (str): Name of the color to alter.
+        saturating (bool, optional): If True, changes hue by saturating RGB layers. 
+            If False, changes hue by zeroing RGB layers. Defaults to False.
 
     Returns:
-    - Numpy array of an image.
+        np.ndarray: Numpy array representing the altered image.
     """
 
     if saturating:
@@ -100,6 +104,16 @@ def image_change_hue(image:np.array, color:str, saturating:bool = False) -> np.a
 
 
 def update_color_key_name(color_key:str) -> str:
+    """
+    Updates the color key name to the full color name.
+
+    Parameters:
+        color_key (str): Short form of the color key.
+
+    Returns:
+        str: Full name of the color key.
+    """
+
     color_mapping = {
         'r': 'red',
         'g': 'green',
@@ -117,15 +131,17 @@ def update_color_key_name(color_key:str) -> str:
 
 def create_list_of_filpped_images(image:np.array) -> list:
     """
-    returns a list of images flipped over each possible axis in following order: 
-    [no flip, flipped over x-axis, flipped over y-axis, flipped over both x and y axis]
+    Returns a list of images flipped over each possible axis.
+
+    The order of flipping: [no flip, flipped over x-axis, flipped over y-axis, flipped over both x and y axis].
 
     Parameters:
-    - image: Numpy array of an image.
+        image (np.ndarray): Numpy array representing an image.
 
     Returns:
-    - List of Numpy arrays.
+        list: List of Numpy arrays representing flipped images.
     """
+
     unflipped = image.copy()
     flipped_x = image_flip(unflipped, 'x')
     flipped_y = image_flip(unflipped, 'y')
@@ -135,15 +151,17 @@ def create_list_of_filpped_images(image:np.array) -> list:
 
 def create_dict_of_colored_images(image:np.array, saturating:bool = False) -> dict:
     """
-    returns a list of images colored in red (r), green (g) and blue (b) by zeroing the unwanted rgb layers
-    also returns the original (o) image in that list 
+    Returns a dictionary of images colored in red (r), green (g), blue (b), cyan (c), magenta (m), yellow (y).
 
     Parameters:
-    - image: Numpy array of an image.
+        image (np.ndarray): Numpy array representing an image.
+        saturating (bool, optional): If True, changes hue by saturating RGB layers. 
+            If False, changes hue by zeroing RGB layers. Defaults to False.
 
     Returns:
-    - dict of Numpy arrays.
+        dict: Dictionary of Numpy arrays representing colored images.
     """
+
     original = image.copy()
     red_colored = image_change_hue(original, 'red', saturating)
     green_colored = image_change_hue(original, 'green', saturating)
@@ -156,15 +174,17 @@ def create_dict_of_colored_images(image:np.array, saturating:bool = False) -> di
    
 def create_all_possible_alterations(image:np.array) -> list[dict]:
     """
-    returns a list of images flipped over each possible axis in following order: 
-    [no flip, flipped over x-axis, flipped over y-axis, flipped over both x and y axis]
+    Returns a list of images flipped over each possible axis.
+
+    The order of flipping: [no flip, flipped over x-axis, flipped over y-axis, flipped over both x and y axis].
 
     Parameters:
-    - image: Numpy array of an image.
+        image (np.ndarray): Numpy array representing an image.
 
     Returns:
-    - List of Numpy arrays.
+        list: List of dictionaries of Numpy arrays representing altered images.
     """
+   
     list_of_flipped_images = create_list_of_filpped_images(image.copy())
 
     unflipped_dict = create_dict_of_colored_images(list_of_flipped_images[0])
@@ -174,7 +194,19 @@ def create_all_possible_alterations(image:np.array) -> list[dict]:
     return [unflipped_dict, flipped_x_dict, flipped_y_dict, flipped_both_dict]
 
 
-def image_matrix_with_alterations(image, *, flip_matrix=None, color_matrix=None):
+def image_matrix_with_alterations(image: np.array, *, flip_matrix: np.array=None, color_matrix: np.array=None):
+    """
+    Returns a composite image with various alterations based on flip and color matrices.
+
+    Parameters:
+        image (np.ndarray): Numpy array representing an image.
+        flip_matrix (np.ndarray, optional): Matrix indicating flipping directions.
+        color_matrix (np.ndarray, optional): Matrix indicating colors for each segment.
+
+    Returns:
+        np.ndarray: Numpy array representing the composite image.
+    """
+    
     try:
         flip_matrix, color_matrix = create_flip_or_color_matrix(flip_matrix, color_matrix)
     except MemoryError as e:
@@ -203,15 +235,33 @@ def image_matrix_with_alterations(image, *, flip_matrix=None, color_matrix=None)
     return np.concatenate(list_of_concatenated_images, axis=0)
 
  
-def enlarge_image(image, factor:int):
+def enlarge_image(image: np.array, factor: int) -> np.array:
+    """
+    Enlarges an image by a given factor.
+
+    Parameters:
+        image (np.ndarray): Numpy array representing an image.
+        factor (int): Integer factor for enlarging.
+
+    Returns:
+        np.ndarray: Numpy array representing the enlarged image.
+    """
+
     factor = int(factor)
     return np.kron(image, np.ones((factor, factor, 1), dtype=image.dtype))
 
 
-def create_color_matrix_from_border_list(color_list):
+def create_color_matrix_from_border_list(color_list: list) -> np.array:
     """
-    Creates a square Numpy array with the border based on the color list
+    Creates a square Numpy array with the border based on the color list.
+
+    Parameters:
+        color_list (list): List of colors.
+
+    Returns:
+        np.ndarray: Numpy array representing the border based on the color list.
     """
+
     if len(color_list) % 4 != 0:
         print("The length of the color list should be divisible by 4")
         return error_image
@@ -230,7 +280,20 @@ def create_color_matrix_from_border_list(color_list):
     return grid
 
 
-def create_colorful_big_one(image, scramble_center=False, *, flip_matrix=None, color_matrix=None):
+def create_colorful_big_one(image: np.array, scramble_center: bool=False, *, flip_matrix: np.array=None, color_matrix: np.array=None) -> np.array:
+    """
+    Creates a composite image with various alterations, including a colored border and a central image.
+
+    Parameters:
+        image (np.ndarray): Numpy array representing an image.
+        scramble_center (bool, optional): If True, the central image will be scrambled. Defaults to False.
+        flip_matrix (np.ndarray, optional): Matrix indicating flipping directions.
+        color_matrix (np.ndarray, optional): Matrix indicating colors for each segment.
+
+    Returns:
+        np.ndarray: Numpy array representing the composite image.
+    """
+    
     try:
         flip_matrix, color_matrix = create_flip_or_color_matrix(flip_matrix, color_matrix)
     except MemoryError as e:
@@ -258,7 +321,18 @@ def create_colorful_big_one(image, scramble_center=False, *, flip_matrix=None, c
     return picture_grid
 
 
-def create_flip_or_color_matrix(flip_matrix=None, color_matrix=None):
+def create_flip_or_color_matrix(flip_matrix: np.array = None, color_matrix: np.array = None) -> tuple[np.array, np.array]:
+    """
+    Creates a flip or color matrix if it is missing and the other one exists.
+
+    Parameters:
+        flip_matrix (np.ndarray, optional): Matrix indicating flipping directions.
+        color_matrix (np.ndarray, optional): Matrix indicating colors for each segment.
+
+    Returns:
+        tuple: Tuple of Numpy arrays representing flip and color matrices.
+    """
+
     if flip_matrix is None:
         flip_matrix = np.full_like(color_matrix, 0, dtype='int')
     elif color_matrix is None:
@@ -273,7 +347,18 @@ def create_flip_or_color_matrix(flip_matrix=None, color_matrix=None):
     return flip_matrix, color_matrix
 
 
-def segment_image(image:np.array, number_of_segments):
+def segment_image(image:np.array, number_of_segments: int) -> list:
+    """
+    Segments an image into a specified number of segments.
+
+    Parameters:
+        image (np.ndarray): Numpy array representing an image.
+        number_of_segments (int): Number of segments to divide the image into.
+
+    Returns:
+        list: List of Numpy arrays representing image segments.
+    """
+
     side_length = int(number_of_segments**0.5)
     segments = []   
     height, width, layer = image.shape
@@ -287,7 +372,18 @@ def segment_image(image:np.array, number_of_segments):
     return segments
 
 
-def reshape_image(image_list, new_arrangment):
+def reshape_image(image_list: list, new_arrangment: list) -> np.array:
+    """
+    Reshapes a list of image segments based on a new arrangement.
+
+    Parameters:
+        image_list (list): List of Numpy arrays representing image segments.
+        new_arrangement (list): New arrangement of segments.
+
+    Returns:
+        np.ndarray: Numpy array representing the reshaped image.
+    """
+
     image_rows = []
     number_of_segments = len(image_list)
     side_length = int(number_of_segments**0.5)
