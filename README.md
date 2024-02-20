@@ -30,3 +30,8 @@ If you want to add a dependency to the project
 ```bash
 poetry add <package-name>
 ```
+
+Main notebook: notebooks/image_manipulation.ipynb
+
+Functions used in the main notebook: scripts/numpy_image_manipulation.py
+Picture used in this exercise: data/input/lala.png (this is not uploaded to GIT)
