@@ -6,11 +6,15 @@ The git repo for this project: https://github.com/ValentijnCoppin/DataScience_Nu
 pip install poetry
 ```
 
-## add dependencies to the project
-If you want to add a dependency to the project
+## adding a virtual environment to your project
+If you want to create a virtual environment inside your project
+This would make it much simpeler to delete everything in case you delete the project
+Poetry will automatically install in the .venv forder if it exists
 ```bash
-poetry add <package-name>
+mkdir .venv
 ```
+
+
 ## installing dependencies
 ```bash
 poetry install --no-root
@@ -19,4 +23,10 @@ poetry install --no-root
 ## Activating the virtual environment
 ```bash
 .venv\Scripts\activate
+```
+
+## add dependencies to the project
+If you want to add a dependency to the project
+```bash
+poetry add <package-name>
 ```
